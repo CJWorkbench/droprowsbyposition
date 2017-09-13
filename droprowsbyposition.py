@@ -11,7 +11,7 @@ class Importable:
     def render(wf_module, table):
         first_row = wf_module.get_param_integer('first_row')
         last_row = wf_module.get_param_integer('last_row')
-        if first_row != None and last_row != None:
+        if first_row > 0 and last_row > 0:
             # index is zero-based
             first_row = first_row - 1
             last_row = last_row - 1

@@ -9,13 +9,13 @@
       "name": "Drop rows from",
       "id_name": "first_row",
       "type": "string",
-      "default": 200
+      "default": 0
     },
     {
       "name": "To",
       "id_name": "last_row",
       "type": "string",
-      "default": 200
+      "default": 0
     }
   ]
 }
