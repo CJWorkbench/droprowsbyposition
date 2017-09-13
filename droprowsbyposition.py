@@ -9,8 +9,8 @@ class Importable:
 
     @staticmethod
     def render(wf_module, table):
-        first_row = wf_module.get_param_number('first_row')
-        last_row = wf_module.get_param_number('last_row')
+        first_row = wf_module.get_param_integer('first_row')
+        last_row = wf_module.get_param_integer('last_row')
         if first_row != None and last_row != None:
             # index is zero-based
             first_row = first_row - 1
