@@ -1,0 +1,21 @@
+{
+  "name": "Drop rows by position",
+  "id_name": "droprowsbyposition",
+  "category" : "Transform",
+  "icon" : "sigma",
+  "description": "Drop rows based on their position.",
+  "parameters": [
+    {
+      "name": "Drop rows from",
+      "id_name": "first_row",
+      "type": "string",
+      "default": 200
+    },
+    {
+      "name": "To",
+      "id_name": "last_row",
+      "type": "string",
+      "default": 200
+    }
+  ]
+}
