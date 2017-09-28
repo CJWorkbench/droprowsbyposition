@@ -1,7 +1,7 @@
 {
   "name": "Drop rows by position",
   "id_name": "droprowsbyposition",
-  "category" : "Transform",
+  "category" : "Analyse",
   "icon" : "sigma",
   "description": "Drop rows based on their position.",
   "parameters": [
