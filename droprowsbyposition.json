@@ -2,7 +2,7 @@
   "name": "Drop rows by position",
   "id_name": "droprowsbyposition",
   "category" : "Analyse",
-  "icon" : "sigma",
+  "icon" : "wrangle",
   "description": "Drop rows based on their position.",
   "parameters": [
     {
