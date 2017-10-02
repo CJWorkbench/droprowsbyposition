@@ -1,12 +1,12 @@
 {
-  "name": "Drop rows by position",
+  "name": "Drop rows",
   "id_name": "droprowsbyposition",
   "category" : "Analyse",
   "icon" : "wrangle",
   "description": "Drop rows based on their position.",
   "parameters": [
     {
-      "name": "Drop rows from",
+      "name": "From",
       "id_name": "first_row",
       "type": "integer",
       "default": 0
