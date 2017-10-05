@@ -1,5 +1,5 @@
 {
-  "name": "Drop Rows",
+  "name": "Drop rows",
   "id_name": "droprowsbyposition",
   "category" : "Analyse",
   "icon" : "wrangle",
