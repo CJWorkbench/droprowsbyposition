@@ -4,6 +4,7 @@
   "category" : "Analyse",
   "icon" : "wrangle",
   "description": "Drop rows based on their position.",
+  "help_url":"modules/analyse/drop-rows",
   "parameters": [
     {
       "name": "From",
