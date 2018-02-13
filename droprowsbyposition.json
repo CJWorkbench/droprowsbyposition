@@ -1,7 +1,7 @@
 {
   "name": "Drop rows",
   "id_name": "droprowsbyposition",
-  "category" : "Analyse",
+  "category" : "Prepare",
   "icon" : "wrangle",
   "description": "Drop rows based on their position.",
   "help_url":"modules/analyse/drop-rows",
