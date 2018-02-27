@@ -4,7 +4,7 @@
   "category" : "Prepare",
   "icon" : "wrangle",
   "description": "Drop rows based on their position.",
-  "help_url":"modules/analyse/drop-rows",
+  "help_url":"modules/prepare/drop-rows",
   "parameters": [
     {
       "name": "From",
