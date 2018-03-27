@@ -1,10 +1,10 @@
 {
   "name": "Drop rows",
   "id_name": "droprowsbyposition",
-  "category" : "Prepare",
+  "category" : "Clean",
   "icon" : "wrangle",
   "description": "Drop rows based on their position.",
-  "help_url":"modules/prepare/drop-rows",
+  "help_url":"modules/clean/drop-rows",
   "parameters": [
     {
       "name": "From",
