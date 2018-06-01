@@ -1,3 +1,5 @@
+import pandas as pd
+
 def render(table, params):
     first_row = params['first_row']
     last_row = params['last_row']
