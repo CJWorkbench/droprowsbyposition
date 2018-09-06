@@ -1,22 +1,30 @@
 {
   "name": "Drop rows",
   "id_name": "droprowsbyposition",
-  "category" : "Clean",
-  "icon" : "wrangle",
+  "category": "Clean",
+  "icon": "wrangle",
   "description": "Drop rows based on their position.",
-  "help_url":"modules/clean/drop-rows",
+  "help_url": "modules/clean/drop-rows",
+  "row_action_menu_entry_title": "Drop selected rows",
   "parameters": [
+    {
+      "name": "Row numbers",
+      "id_name": "rows",
+      "type": "string",
+      "default": "",
+      "placeholder": "1-5, 8"
+    },
     {
       "name": "From",
       "id_name": "first_row",
       "type": "integer",
-      "default": 0
+      "visible_if": { "id_name": "first_row", "value": 0, "invert": true, "comment": "'fist_row' is deprecated: we prefer 'rows', which supercedes it." }
     },
     {
       "name": "To",
       "id_name": "last_row",
       "type": "integer",
-      "default": 0
+      "visible_if": { "id_name": "last_row", "value": 0, "invert": true, "comment": "'last_row' is deprecated: we prefer 'rows', which supercedes it." }
     }
   ]
 }

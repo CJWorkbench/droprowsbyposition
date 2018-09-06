@@ -1,20 +1,88 @@
+import re
+from typing import Any, Dict, Tuple
 import pandas as pd
+from pandas import IntervalIndex
+
+
+commas = re.compile('\\s*,\\s*')
+numbers = re.compile('(?P<first>[1-9]\d*)(?:-(?P<last>[1-9]\d*))?')
+
+
+def parse_interval(s: str) -> Tuple[int, int]:
+    """
+    Parse a string 'interval' into a tuple
+
+    >>> parse_interval('1')
+    (0, 1)
+    >>> parse_interval('1-3')
+    (0, 2)
+    >>> parse_interval('5')
+    (4, 4)
+    >>> parse_interval('hi')
+    Traceback (most recent call last):
+        ...
+    ValueError: Rows must look like "1-2", "5" or "1-2, 5"; got "hi"
+    """
+    match = numbers.fullmatch(s)
+    if not match:
+        raise ValueError(
+            f'Rows must look like "1-2", "5" or "1-2, 5"; got "{s}"'
+        )
+
+    first = int(match.group('first'))
+    last = int(match.group('last') or first)
+    return (first - 1, last - 1)
+
+
+class Form:
+    def __init__(self, index: IntervalIndex):
+        self.index = index
+
+    @staticmethod
+    def parse_v1(rows: str) -> 'Form':
+        """Parse 'rows', or raise ValueError"""
+        tuples = [parse_interval(s)
+                  for s in commas.split(rows.strip())]
+        return Form(IntervalIndex.from_tuples(tuples, closed='both'))
+
+    @staticmethod
+    def parse_v0(first_row: str, last_row: str) -> 'Form':
+        try:
+            first_row = int(first_row)
+        except ValueError:
+            raise ValueError(f'"{first_row}" is not a number')
+
+        try:
+            last_row = int(last_row)
+        except ValueError:
+            raise ValueError(f'"{last_row}" is not a number')
+
+        if first_row <= 0 or last_row <= 0:
+            raise ValueError('Row numbers cannot be below 1')
+
+        return Form(IntervalIndex.from_tuples(
+            [(first_row - 1, last_row - 1)],
+            closed='both'
+        ))
+
+    @staticmethod
+    def parse(d: Dict[str, Any]) -> 'Form':
+        try:
+            rows = d['rows']
+            if not rows:
+                raise KeyError('fallback')
+            return Form.parse_v1(rows)
+        except KeyError:
+            return Form.parse_v0(d['first_row'], d['last_row'])
 
 
 def render(table, params):
-    first_row = params['first_row']
-    last_row = params['last_row']
-    if first_row >= 0 and last_row > 0:
-        # index is zero-based
-        # we don't need to decrement last_row because iloc does not include the
-        # upper bound
-        if first_row != 0:
-            first_row = first_row - 1
-        if first_row == 0:
-            newtab = table.iloc[last_row:]
-        else:
-            newtab = pd.concat([table.iloc[0:first_row],
-                                table.iloc[last_row:]])
-        return newtab
-    else:
-        return table
+    try:
+        form = Form.parse(params)
+    except ValueError as err:
+        return str(err)
+
+    mask = form.index.get_indexer(table.index) == -1
+    ret = table[mask]
+    ret.index = pd.RangeIndex(len(ret))
+    return ret
