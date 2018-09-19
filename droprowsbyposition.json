@@ -3,9 +3,9 @@
   "id_name": "droprowsbyposition",
   "category": "Clean",
   "icon": "wrangle",
-  "description": "Drop rows based on their position.",
+  "description": "Delete rows based on their position.",
   "help_url": "modules/clean/drop-rows",
-  "row_action_menu_entry_title": "Drop selected rows",
+  "row_action_menu_entry_title": "Delete selected rows",
   "parameters": [
     {
       "name": "Row numbers",
