@@ -14,37 +14,9 @@ class TestDropRowsByPosition(unittest.TestCase):
             'C': [None, None, None, None],
         })
 
-    def test_old_schema_drop_first_row(self):
-        out = render(self.table, {'first_row': 1, 'last_row': 1})
-        assert_frame_equal(out, pd.DataFrame({
-            'A': [2, 3, 4],
-            'B': [3, None, 5],
-            'C': [None, None, None],
-        }))
-
-    def test_old_schema_drop_middle_rows(self):
-        out = render(self.table, {'first_row': 2, 'last_row': 3})
-        assert_frame_equal(out, pd.DataFrame({
-            'A': [1, 4],
-            'B': [2.0, 5.0],
-            'C': [None, None],
-        }))
-
-    def test_conflict_old_and_new_schema_new_empty(self):
-        out = render(self.table, {'rows': '', 'first_row': 2, 'last_row': 3})
-        assert_frame_equal(out, pd.DataFrame({
-            'A': [1, 4],
-            'B': [2.0, 5.0],
-            'C': [None, None],
-        }))
-
-    def test_conflict_old_and_new_schema_new_wins(self):
-        out = render(self.table, {'rows': '1', 'first_row': 2, 'last_row': 3})
-        assert_frame_equal(out, pd.DataFrame({
-            'A': [2, 3, 4],
-            'B': [3, None, 5],
-            'C': [None, None, None],
-        }))
+    def test_default_params_NOP(self):
+        out = render(self.table, {'rows': '', 'first_row': 0, 'last_row': 0})
+        assert_frame_equal(out, self.table)
 
     def test_drop_one_row(self):
         out = render(self.table, {'rows': '2'})
@@ -99,4 +71,38 @@ class TestDropRowsByPosition(unittest.TestCase):
             'A': [1, 2, 3, 4],
             'B': [2, 3, None, 5],
             'C': [None, None, None, None],
+        }))
+
+
+    # These tests check that modules which have the obsolete "start" and "ends" rows still work
+    def test_old_schema_drop_first_row(self):
+        out = render(self.table, {'first_row': 1, 'last_row': 1})
+        assert_frame_equal(out, pd.DataFrame({
+            'A': [2, 3, 4],
+            'B': [3, None, 5],
+            'C': [None, None, None],
+        }))
+
+    def test_old_schema_drop_middle_rows(self):
+        out = render(self.table, {'first_row': 2, 'last_row': 3})
+        assert_frame_equal(out, pd.DataFrame({
+            'A': [1, 4],
+            'B': [2.0, 5.0],
+            'C': [None, None],
+        }))
+
+    def test_conflict_old_and_new_schema_new_empty(self):
+        out = render(self.table, {'rows': '', 'first_row': 2, 'last_row': 3})
+        assert_frame_equal(out, pd.DataFrame({
+            'A': [1, 4],
+            'B': [2.0, 5.0],
+            'C': [None, None],
+        }))
+
+    def test_conflict_old_and_new_schema_new_wins(self):
+        out = render(self.table, {'rows': '1', 'first_row': 2, 'last_row': 3})
+        assert_frame_equal(out, pd.DataFrame({
+            'A': [2, 3, 4],
+            'B': [3, None, 5],
+            'C': [None, None, None],
         }))

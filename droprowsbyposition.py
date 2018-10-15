@@ -67,13 +67,17 @@ class Form:
 
     @staticmethod
     def parse(d: Dict[str, Any]) -> 'Form':
-        try:
-            rows = d['rows']
-            if not rows:
-                raise KeyError('fallback')
-            return Form.parse_v1(rows)
-        except KeyError:
-            return Form.parse_v0(d['first_row'], d['last_row'])
+        if 'rows' in d and d['rows'] != '':
+            return Form.parse_v1(d['rows'])
+        else:
+            first = d['first_row']
+            last = d['last_row']
+
+            # Drop no rows if we have default parameter settings
+            if first==0 and last==0:
+                return Form(pd.interval_range(start=0, end=0))
+
+            return Form.parse_v0(first, last)
 
 
 def render(table, params):

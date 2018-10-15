@@ -23,6 +23,8 @@ To add a feature on the Python side:
 To develop continuously on Workbench:
 
 1. Check out the columnchart repository in a sibling directory to your checked-out Workbench code.
-2. Start Workbench with ``CACHE_MODULES=false bin/dev``
+2. Start Workbench with ``CACHE_MODULES=false bin/dev start`` 
 3. In a separate tab in the Workbench directory, run ``pipenv run ./manage.py develop-module droprowsbyposition``
 4. Edit this code; the module will be reloaded in Workbench immediately. In the Workbench website, modify parameters to execute the reloaded code.
+
+For full instructions, see [developing your own modules](https://github.com/CJWorkbench/cjworkbench/wiki/Creating-A-Module)
