@@ -1,5 +1,5 @@
 {
-  "name": "Drop rows",
+  "name": "Delete rows",
   "id_name": "droprowsbyposition",
   "category": "Clean",
   "icon": "wrangle",
