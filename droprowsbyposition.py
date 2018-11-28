@@ -86,6 +86,10 @@ def render(table, params):
     except ValueError as err:
         return str(err)
 
+    if table.empty:
+        # https://www.pivotaltracker.com/n/projects/2132449/stories/161945860
+        return table
+
     mask = form.index.get_indexer(table.index) == -1
     ret = table[mask]
     ret.index = pd.RangeIndex(len(ret))

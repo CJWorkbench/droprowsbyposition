@@ -18,6 +18,12 @@ class TestDropRowsByPosition(unittest.TestCase):
         out = render(self.table, {'rows': '', 'first_row': 0, 'last_row': 0})
         assert_frame_equal(out, self.table)
 
+    def test_empty_input_NOP(self):
+        # https://www.pivotaltracker.com/n/projects/2132449/stories/161945860
+        out = render(pd.DataFrame(),
+                     {'rows': '', 'first_row': 0, 'last_row': 0})
+        self.assertTrue(out.empty)
+
     def test_drop_one_row(self):
         out = render(self.table, {'rows': '2'})
         assert_frame_equal(out, pd.DataFrame({
