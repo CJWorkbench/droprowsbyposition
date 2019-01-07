@@ -30,7 +30,7 @@ To add a feature on the JavaScript side:
 To develop continuously on Workbench:
 
 #. Check out the columnchart repository in a sibling directory to your checked-out Workbench code.
-#. Start Workbench with ``CACHE_MODULES=false bin/dev start`` 
+#. Start Workbench with ``bin/dev start`` 
 #. In a separate tab in the Workbench directory, run ``pipenv run ./manage.py develop-module droprowsbyposition``
 #. Edit this code; the module will be reloaded in Workbench immediately. In the Workbench website, modify parameters to execute the reloaded code.
 
