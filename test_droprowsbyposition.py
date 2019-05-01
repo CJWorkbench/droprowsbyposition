@@ -46,13 +46,12 @@ class TestDropRowsByPosition(unittest.TestCase):
         })
 
     def test_default_params_NOP(self):
-        out = render(self.table, {'rows': '', 'first_row': 0, 'last_row': 0})
+        out = render(self.table, {'rows': ''})
         assert_frame_equal(out, self.table)
 
     def test_empty_input_NOP(self):
         # https://www.pivotaltracker.com/n/projects/2132449/stories/161945860
-        out = render(pd.DataFrame(),
-                     {'rows': '', 'first_row': 0, 'last_row': 0})
+        out = render(pd.DataFrame(), {'rows': ''})
         self.assertTrue(out.empty)
 
     def test_drop_one_row(self):
@@ -110,44 +109,10 @@ class TestDropRowsByPosition(unittest.TestCase):
             'C': [None, None, None, None],
         }))
 
-
-    # These tests check that modules which have the obsolete "start" and "ends" rows still work
-    def test_old_schema_drop_first_row(self):
-        out = render(self.table, {'first_row': 1, 'last_row': 1})
-        assert_frame_equal(out, pd.DataFrame({
-            'A': [2, 3, 4],
-            'B': [3, None, 5],
-            'C': [None, None, None],
-        }))
-
-    def test_old_schema_drop_middle_rows(self):
-        out = render(self.table, {'first_row': 2, 'last_row': 3})
-        assert_frame_equal(out, pd.DataFrame({
-            'A': [1, 4],
-            'B': [2.0, 5.0],
-            'C': [None, None],
-        }))
-
-    def test_conflict_old_and_new_schema_new_empty(self):
-        out = render(self.table, {'rows': '', 'first_row': 2, 'last_row': 3})
-        assert_frame_equal(out, pd.DataFrame({
-            'A': [1, 4],
-            'B': [2.0, 5.0],
-            'C': [None, None],
-        }))
-
-    def test_conflict_old_and_new_schema_new_wins(self):
-        out = render(self.table, {'rows': '1', 'first_row': 2, 'last_row': 3})
-        assert_frame_equal(out, pd.DataFrame({
-            'A': [2, 3, 4],
-            'B': [3, None, 5],
-            'C': [None, None, None],
-        }))
-
     def test_remove_unused_categories(self):
         result = render(
             pd.DataFrame({'A': ['a', 'b', 'c', 'd']}, dtype='category'),
-            {'rows': '1-2', 'first_row': 0, 'last_row': 0}
+            {'rows': '1-2'}
         )
         assert_frame_equal(result,
                            pd.DataFrame({'A': ['c', 'd']}, dtype='category'))
