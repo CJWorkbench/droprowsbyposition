@@ -1,7 +1,38 @@
 import unittest
 import pandas as pd
 from pandas.testing import assert_frame_equal
-from droprowsbyposition import render
+from droprowsbyposition import migrate_params, render
+
+
+class TestMigrateParams(unittest.TestCase):
+    def test_v0_with_first_row_and_last_row(self):
+        # droprowsbyposition got some behavior prior to our migrate_params()
+        # idea. So it actually has two logic paths....
+        self.assertEqual(migrate_params({
+            'rows': '',
+            'first_row': 2,
+            'last_row': 54,
+        }), {
+            'rows': '2-54',
+        })
+
+    def test_v0_with_rows(self):
+        self.assertEqual(migrate_params({
+            'rows': '1-23',
+            # first_row and last_row are 'backup' values, only for when 'rows'
+            # is not set. So they'll be dropped.
+            'first_row': 2,
+            'last_row': 54,
+        }), {
+            'rows': '1-23',
+        })
+
+    def test_v1(self):
+        self.assertEqual(migrate_params({
+            'rows': '1-23',
+        }), {
+            'rows': '1-23',
+        })
 
 
 class TestDropRowsByPosition(unittest.TestCase):

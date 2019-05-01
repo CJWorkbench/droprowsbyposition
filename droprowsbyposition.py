@@ -96,3 +96,25 @@ def render(table, params):
     ret = ret.apply(lambda s: s.cat.remove_unused_categories()
                     if hasattr(s, 'cat') else s)
     return ret
+
+
+def _migrate_params_v0_to_v1(params):
+    """
+    v0: optional "first_row" and "last_row" were fallback if "rows" empty.
+
+    v1: always use "rows".
+
+    (droprowsbyposition had some special logic and special visible_if rules
+    because we changed its feature set before migrate_params() existed. That's
+    why this migration handles two cases.)
+    """
+    if params['rows']:
+        return {'rows': params['rows']}
+    else:
+        return {'rows': '%d-%d' % (params['first_row'], params['last_row'])}
+
+
+def migrate_params(params):
+    if 'first_row' in params:
+        params = _migrate_params_v0_to_v1(params)
+    return params
