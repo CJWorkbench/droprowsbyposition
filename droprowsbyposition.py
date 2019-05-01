@@ -93,4 +93,6 @@ def render(table, params):
     mask = form.index.get_indexer(table.index) == -1
     ret = table[mask]
     ret.index = pd.RangeIndex(len(ret))
+    ret = ret.apply(lambda s: s.cat.remove_unused_categories()
+                    if hasattr(s, 'cat') else s)
     return ret
