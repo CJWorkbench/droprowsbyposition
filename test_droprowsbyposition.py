@@ -86,6 +86,13 @@ class TestDropRowsByPosition(unittest.TestCase):
             'C': [None],
         }))
 
+    def test_drop_overlapping_interval_ranges(self):
+        result = render(
+            pd.DataFrame({'A': [1, 2, 3, 4, 5]}),
+            {'rows': '1-2,2'}
+        )
+        assert_frame_equal(result, pd.DataFrame({'A': [3, 4, 5]}))
+
     def test_drop_everything(self):
         out = render(self.table, {'rows': '1-4'})
         expected = pd.DataFrame({'A': [1], 'B': [1.0], 'C': [None]})[0:0]

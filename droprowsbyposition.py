@@ -1,5 +1,6 @@
 import re
 from typing import Any, Dict, Tuple
+import numpy as np
 import pandas as pd
 from pandas import IntervalIndex
 
@@ -50,12 +51,19 @@ def render(table, params):
         # https://www.pivotaltracker.com/n/projects/2132449/stories/161945860
         return table
 
-    mask = index.get_indexer(table.index) == -1
-    ret = table[mask]
-    ret.reset_index(drop=True, inplace=True)
-    ret = ret.apply(lambda s: s.cat.remove_unused_categories()
-                    if hasattr(s, 'cat') else s)
-    return ret
+    # index.get_indexer(table.index) breaks on overlapping index
+    # (looks like pd.IntervalIndex is missing some useful stuff!)
+    #
+    # Simple hack: create a bitmask from the IntervalIndex
+    mask = np.zeros(len(table), dtype=bool)
+    for start, end in index.to_tuples():
+        mask[start:end+1] = True
+
+    table = table[~mask]
+    table.reset_index(drop=True, inplace=True)
+    table = table.apply(lambda s: s.cat.remove_unused_categories()
+                        if hasattr(s, 'cat') else s)
+    return table
 
 
 def _migrate_params_v0_to_v1(params):
