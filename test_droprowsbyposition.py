@@ -123,3 +123,10 @@ class TestDropRowsByPosition(unittest.TestCase):
         )
         assert_frame_equal(result,
                            pd.DataFrame({'A': ['c', 'd']}, dtype='category'))
+
+    def test_remove_unused_categories_for_empty_row(self):
+        result = render(
+            pd.DataFrame({'A': ['a', 'b', 'c', 'd']}, dtype='category'),
+            {'rows': '1-4'}
+        )
+        assert_frame_equal(result, pd.DataFrame({'A': []}, dtype='category'))

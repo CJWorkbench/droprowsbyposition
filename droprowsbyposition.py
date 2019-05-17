@@ -61,8 +61,10 @@ def render(table, params):
 
     table = table[~mask]
     table.reset_index(drop=True, inplace=True)
-    table = table.apply(lambda s: s.cat.remove_unused_categories()
-                        if hasattr(s, 'cat') else s)
+    for column in table.columns:
+        series = table[column]
+        if hasattr(series, 'cat'):
+            series.cat.remove_unused_categories(inplace=True)
     return table
 
 
