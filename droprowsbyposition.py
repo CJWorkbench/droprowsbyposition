@@ -9,7 +9,7 @@ commas = re.compile('\\s*,\\s*')
 numbers = re.compile('(?P<first>[1-9]\d*)(?:-(?P<last>[1-9]\d*))?')
 
 
-def RangeFormatError(ValueError)
+class RangeFormatError(ValueError):
     def __init__(self, value):
         self.value = value
         
