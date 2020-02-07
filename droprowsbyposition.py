@@ -3,11 +3,25 @@ from typing import Any, Dict, Tuple
 import numpy as np
 import pandas as pd
 from pandas import IntervalIndex
-
+from cjwmodule import i18n
 
 commas = re.compile('\\s*,\\s*')
 numbers = re.compile('(?P<first>[1-9]\d*)(?:-(?P<last>[1-9]\d*))?')
 
+
+def RangeFormatError(ValueError)
+    self.value
+    
+    def __init__(self, value):
+        self.value = value
+        
+    @property
+    def i18n_message(self) -> i18n.I18nMessage:
+        return i18n.trans(
+            "badParam.rows.invalidRange",
+            'Rows must look like "1-2", "5" or "1-2, 5"; got "{value}"',
+            {"value": self.value}
+        )
 
 def parse_interval(s: str) -> Tuple[int, int]:
     """
@@ -22,13 +36,11 @@ def parse_interval(s: str) -> Tuple[int, int]:
     >>> parse_interval('hi')
     Traceback (most recent call last):
         ...
-    ValueError: Rows must look like "1-2", "5" or "1-2, 5"; got "hi"
+    RangeFormatError: Rows must look like "1-2", "5" or "1-2, 5"; got "hi"
     """
     match = numbers.fullmatch(s)
     if not match:
-        raise ValueError(
-            f'Rows must look like "1-2", "5" or "1-2, 5"; got "{s}"'
-        )
+        raise RangeFormatError(s)
 
     first = int(match.group('first'))
     last = int(match.group('last') or first)
@@ -36,7 +48,7 @@ def parse_interval(s: str) -> Tuple[int, int]:
 
 
 def parse_interval_index(rows: str) -> IntervalIndex:
-    """Parse 'rows', or raise ValueError"""
+    """Parse 'rows', or raise RangeFormatError"""
     tuples = [parse_interval(s) for s in commas.split(rows.strip()) if s]
     return IntervalIndex.from_tuples(tuples, closed='both')
 
@@ -44,8 +56,8 @@ def parse_interval_index(rows: str) -> IntervalIndex:
 def render(table, params):
     try:
         index = parse_interval_index(params['rows'])
-    except ValueError as err:
-        return str(err)
+    except RangeFormatError as err:
+        return err.i18n_message
 
     if table.empty:
         # https://www.pivotaltracker.com/n/projects/2132449/stories/161945860
