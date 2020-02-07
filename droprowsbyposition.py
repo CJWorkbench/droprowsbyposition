@@ -10,8 +10,6 @@ numbers = re.compile('(?P<first>[1-9]\d*)(?:-(?P<last>[1-9]\d*))?')
 
 
 def RangeFormatError(ValueError)
-    self.value
-    
     def __init__(self, value):
         self.value = value
         
