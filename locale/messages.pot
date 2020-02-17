@@ -19,7 +19,7 @@ msgid "_spec.parameters.rows.placeholder"
 msgstr ""
 
 #. default-message: Rows must look like "1-2", "5" or "1-2, 5"; got "{value}"
-#: droprowsbyposition.py:20
+#: droprowsbyposition.py:18
 msgid "badParam.rows.invalidRange"
 msgstr ""
 
