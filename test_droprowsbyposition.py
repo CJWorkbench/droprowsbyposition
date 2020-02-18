@@ -2,6 +2,7 @@ import unittest
 import pandas as pd
 from pandas.testing import assert_frame_equal
 from droprowsbyposition import migrate_params, render
+from cjwmodule.testing.i18n import i18n_message
 
 
 class TestMigrateParams(unittest.TestCase):
@@ -105,7 +106,7 @@ class TestDropRowsByPosition(unittest.TestCase):
         out = render(self.table, {'rows': '0-1'})
         self.assertEqual(
             out,
-            'Rows must look like "1-2", "5" or "1-2, 5"; got "0-1"'
+            i18n_message("badParam.rows.invalidRange", {"value":"0-1"})
         )
 
     def test_drop_after_end(self):

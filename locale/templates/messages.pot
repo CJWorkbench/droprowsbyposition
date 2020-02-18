@@ -1,0 +1,25 @@
+#. default-message: Delete rows
+msgid "_spec.name"
+msgstr ""
+
+#. default-message: Delete rows based on their position.
+msgid "_spec.description"
+msgstr ""
+
+#. default-message: Delete selected rows
+msgid "_spec.row_action_menu_entry_title"
+msgstr ""
+
+#. default-message: Row numbers
+msgid "_spec.parameters.rows.name"
+msgstr ""
+
+#. default-message: 1-5, 8
+msgid "_spec.parameters.rows.placeholder"
+msgstr ""
+
+#. default-message: Rows must look like "1-2", "5" or "1-2, 5"; got "{value}"
+#: droprowsbyposition.py:18
+msgid "badParam.rows.invalidRange"
+msgstr ""
+
