@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-02-17 10:50+0000\n"
+"POT-Creation-Date: 2020-02-18 15:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: el\n"
@@ -20,19 +20,19 @@ msgstr ""
 "Generated-By: Babel 2.8.0\n"
 
 msgid "_spec.name"
-msgstr ""
+msgstr "Διαγραφή σειρών"
 
 msgid "_spec.description"
-msgstr ""
+msgstr "Διαγραφή σειρών βάσει της θέσης τους."
 
 msgid "_spec.row_action_menu_entry_title"
-msgstr ""
+msgstr "Διαγραφή επιλεγμένων σειρών"
 
 msgid "_spec.parameters.rows.name"
-msgstr ""
+msgstr "Αριθμοί σειρών"
 
 msgid "_spec.parameters.rows.placeholder"
-msgstr ""
+msgstr "1-5, 8"
 
 #: droprowsbyposition.py:18
 msgid "badParam.rows.invalidRange"
