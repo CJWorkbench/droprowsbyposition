@@ -36,5 +36,5 @@ msgstr "1-5, 8"
 
 #: droprowsbyposition.py:18
 msgid "badParam.rows.invalidRange"
-msgstr ""
+msgstr "Οι σειρές πρέπει να έχουν την εμφάνιση \"1-2\", \"5\" ή \"1-2, 5\" – τώρα η τιμή είναι \"{value}\""
 
