@@ -2,24 +2,37 @@ import re
 from typing import Any, Dict, Tuple
 import numpy as np
 import pandas as pd
-from pandas import IntervalIndex
 from cjwmodule import i18n
 
-commas = re.compile('\\s*,\\s*')
-numbers = re.compile('(?P<first>[1-9]\d*)(?:-(?P<last>[1-9]\d*))?')
+commas = re.compile(r"\s*,\s*")
+numbers = re.compile(r"(?P<first>[1-9]\d*)(?:-(?P<last>[1-9]\d*))?")
 
 
 class RangeFormatError(ValueError):
     def __init__(self, value):
         self.value = value
-        
+
     @property
     def i18n_message(self) -> i18n.I18nMessage:
         return i18n.trans(
             "badParam.rows.invalidRange",
             'Rows must look like "1-2", "5" or "1-2, 5"; got "{value}"',
-            {"value": self.value}
+            {"value": self.value},
         )
+
+
+class BackwardsRangeError(ValueError):
+    def __init__(self, value):
+        self.value = value
+
+    @property
+    def i18n_message(self) -> i18n.I18nMessage:
+        return i18n.trans(
+            "badParam.rows.backwardsRange",
+            'Row ranges must increase like "1-3", not "3-1"; got "{value}"',
+            {"value": self.value},
+        )
+
 
 def parse_interval(s: str) -> Tuple[int, int]:
     """
@@ -35,45 +48,47 @@ def parse_interval(s: str) -> Tuple[int, int]:
     Traceback (most recent call last):
         ...
     RangeFormatError: Rows must look like "1-2", "5" or "1-2, 5"; got "hi"
+    >>> parse_interval('12-10')
+    Traceback (most recent call last):
+        ...
+    BackwardsRangeError: Row ranges must increase like "1-3", not "3-1"; got "12-10"
     """
     match = numbers.fullmatch(s)
     if not match:
         raise RangeFormatError(s)
 
-    first = int(match.group('first'))
-    last = int(match.group('last') or first)
-    return (first - 1, last - 1)
+    first = int(match.group("first"))
+    last = int(match.group("last") or first)
+    if first > last:
+        raise BackwardsRangeError(s)
+    return (first - 1, last)
 
 
-def parse_interval_index(rows: str) -> IntervalIndex:
-    """Parse 'rows', or raise RangeFormatError"""
-    tuples = [parse_interval(s) for s in commas.split(rows.strip()) if s]
-    return IntervalIndex.from_tuples(tuples, closed='both')
+def parse_mask(rows: str, n_rows: int) -> np.array:
+    """Parse 'rows', or raise RangeFormatError or BackwardsRangeError"""
+    mask = np.zeros(n_rows, np.bool)
+    for s in commas.split(rows.strip()):
+        if s:
+            begin, end = parse_interval(s)  # raise RangeFormatError/BackwardsRangeError
+            mask[begin:end] = True
+    return mask
 
 
 def render(table, params):
     try:
-        index = parse_interval_index(params['rows'])
-    except RangeFormatError as err:
+        mask = parse_mask(params["rows"], len(table))
+    except (RangeFormatError, BackwardsRangeError) as err:
         return err.i18n_message
 
     if table.empty:
         # https://www.pivotaltracker.com/n/projects/2132449/stories/161945860
         return table
 
-    # index.get_indexer(table.index) breaks on overlapping index
-    # (looks like pd.IntervalIndex is missing some useful stuff!)
-    #
-    # Simple hack: create a bitmask from the IntervalIndex
-    mask = np.zeros(len(table), dtype=bool)
-    for start, end in index.to_tuples():
-        mask[start:end+1] = True
-
     table = table[~mask]
     table.reset_index(drop=True, inplace=True)
     for column in table.columns:
         series = table[column]
-        if hasattr(series, 'cat'):
+        if hasattr(series, "cat"):
             series.cat.remove_unused_categories(inplace=True)
     return table
 
@@ -88,13 +103,13 @@ def _migrate_params_v0_to_v1(params):
     because we changed its feature set before migrate_params() existed. That's
     why this migration handles two cases.)
     """
-    if params['rows']:
-        return {'rows': params['rows']}
+    if params["rows"]:
+        return {"rows": params["rows"]}
     else:
-        return {'rows': '%d-%d' % (params['first_row'], params['last_row'])}
+        return {"rows": "%d-%d" % (params["first_row"], params["last_row"])}
 
 
 def migrate_params(params):
-    if 'first_row' in params:
+    if "first_row" in params:
         params = _migrate_params_v0_to_v1(params)
     return params
